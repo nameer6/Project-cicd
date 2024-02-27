@@ -28,9 +28,6 @@ jobs:
   # Build job
   build:
     runs-on: ${{matrix.os}}
-    strategy: 
-    matrix: 
-    os: [ubuntu-latest, macOS-latest, windows-latest]
     
     steps:
       - name: Checkout
@@ -85,6 +82,14 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./out
+
+      - name: Build and Push Docker Image
+        uses: mr-smithers-excellent/docker-build-push@v6
+        with:
+          image: nameeruddin6/project-cicd
+          registry: docker.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
   # Deployment job
   deploy:
